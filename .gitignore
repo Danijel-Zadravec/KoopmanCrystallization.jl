@@ -1,0 +1,37 @@
+# Julia
+/Manifest*.toml
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/deps.jl
+/docs/build/
+/docs/site/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Julia packages
+/dev/
+/packages/
+
+# Output files
+*.png
+*.pdf
+*.svg
+results/
+plots/
+data/
+output/
