@@ -8,7 +8,7 @@ A Julia package demonstrating the crystallization process optimization case stud
 Since this is a development package, clone the repository and activate the environment:
 
 ```bash
-git clone https://github.com/yourusername/KoopmanCrystallization.jl.git
+git clone https://github.com/Danijel-Zadravec/KoopmanCrystallization.jl
 cd KoopmanCrystallization.jl
 julia --project=.
 ```
