@@ -1,89 +1,60 @@
 # KoopmanCrystallization.jl
 
-A Julia package demonstrating the crystallization process optimization case study presented in the associated research paper (currently under review). It implements Koopman expectation and Backoff-assisted Iterative Optimization strategies for handling parametric uncertainty.
+A Julia package demonstrating the crystallization process optimization case study presented in the associated research paper Optimal Control of Uncertain Batch Processes via Koopman Expectation-Assisted Gradient Methods (currently under review). It implements Koopman expectation and Backoff-assisted Iterative Optimization strategies for handling parametric uncertainty.
 
 
-## Installation
+## Installation & Quick Start
 
-Since this is a development package, clone the repository and activate the environment.
+### Prerequisites
+- Julia 1.6 or higher
+- VS Code with Julia extension (recommended)
 
-### Option 1: Command Line Installation
+### Option 1: VS Code Workflow (Recommended)
 
-```bash
-git clone https://github.com/Danijel-Zadravec/KoopmanCrystallization.jl
-cd KoopmanCrystallization.jl
-julia --project=.
-```
-
-In Julia REPL:
-```julia
-using Pkg
-Pkg.instantiate()  # Install all dependencies
-using KoopmanCrystallization  # Load the package
-```
-
-### Option 2: VS Code Workflow (Recommended)
-
-1. **Clone the repository:**
+1. **Clone and open:**
    ```bash
    git clone https://github.com/Danijel-Zadravec/KoopmanCrystallization.jl
    ```
+   - File → Open Folder → Select `KoopmanCrystallization.jl`
 
-2. **Open in VS Code:**
-   - Open VS Code
-   - File → Open Folder → Select the `KoopmanCrystallization.jl` folder
-   - Install the Julia extension if not already installed
-
-3. **Activate the environment:**
-   - Press Ctrl+Shift+P and type "Julia: Start REPL"
-   - This will open the Julia REPL in VS Code and should automatically activate the project environment
-   - **Verify the environment is active:** Look for `(KoopmanCrystallization) pkg>` in the REPL prompt when you press `]`
-   - If not automatically activated, type `] activate .` in the Julia REPL
-   - In the Julia REPL, run:
+2. **Setup environment:**
+   - Ctrl+Shift+P → "Julia: Start REPL" (auto-activates project environment)
+   - In Julia REPL:
      ```julia
      using Pkg
      Pkg.instantiate()
+     using KoopmanCrystallization  # Verify installation
      ```
 
-4. **Verify installation:**
-   ```julia
-   using KoopmanCrystallization
-   # If no errors, the package is ready to use!
+3. **Run the example:**
+   - Open `case_study_final_script.jl`
+   - Ctrl+Shift+P → "Julia: Execute File" or execute line by line with Shift+Enter
+
+### Option 2: Command Line Workflow
+
+1. **Clone and setup:**
+   ```bash
+   git clone https://github.com/Danijel-Zadravec/KoopmanCrystallization.jl
+   cd KoopmanCrystallization.jl
+   julia --project=.
    ```
 
-5. **Run the example:**
-   - Open `case_study_final_script.jl` in VS Code
-   - Use Ctrl+Shift+P → "Julia: Execute File" or run line by line
+2. **Install dependencies:**
+   ```julia
+   using Pkg
+   Pkg.instantiate()
+   using KoopmanCrystallization  # Verify installation
+   ```
 
-## Quick Start
+3. **Run the example:**
+   ```bash
+   julia --project=. case_study_final_script.jl
+   ```
 
-### Running the Case Study
-
-The main example is in `case_study_final_script.jl`. This script demonstrates the complete workflow:
-
-**In VS Code:**
-1. Open `case_study_final_script.jl`
-2. Make sure Julia REPL is started (Ctrl+Shift+P → "Julia: Start REPL")
-3. Run the entire script with Ctrl+Shift+P → "Julia: Execute File"
-4. Or execute sections line by line using Ctrl+Enter
-
-**From Command Line:**
-```julia
-julia --project=. case_study_final_script.jl
-```
-
-### What the Example Demonstrates:
-- **Model setup and parameterization** - Crystallization process with temperature control
-- **Deterministic optimization** - Finding optimal temperature profiles
-- **Uncertainty quantification** - Handling parameter uncertainty
-- **Backoff optimization** - Constraint violation control using Koopman expectation
-- **Results visualization** - Plotting state trajectories and printing key metrics
-
-### Expected Output:
-The script will print:
-- Koopman Solution Results (objective value and violation frequencies)
-- Monte Carlo Results (average metrics from uncertainty analysis)
-- Generate plots showing temperature profiles and state evolution
+### Expected Output
+- Koopman Solution Results (objective and violation frequencies)
+- Monte Carlo Results (uncertainty analysis averages)
+- Plots of temperature profiles and state evolution
 
 
 ## License

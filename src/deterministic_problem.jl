@@ -134,7 +134,7 @@ function set_backoff(prob::DeterministicProblem, offset_new)
 end
 
 
-function plot_states(sol::ODESolution, determ_problem::DeterministicProblem)
+function plot_states(sol::ODESolution, determ_problem::DeterministicProblem; plot_title="Crystallization Process States")
     """
     Plot crystallization states on separate axes - each y variable individually
     """
@@ -145,90 +145,103 @@ function plot_states(sol::ODESolution, determ_problem::DeterministicProblem)
     # Time vector for plotting
     tspan = sol.prob.tspan
     t_plot = range(tspan[1], stop=tspan[2], length=1000)
+    
+    # Convert time to minutes for x-axis
+    t_minutes = t_plot ./ 60.0
 
     # Create individual plots for each y variable
     plots_array = []
     h_offset = sol.ps[:h_offset]
+    
     # Plot 1: y1 (Solute Concentration) with saturation limits
-    p1 = plot(t_plot, [sol(t, idxs=:y1) for t in t_plot],
-        label="y1 (Concentration)", xlabel="Time [s]", ylabel="Concentration [g/g]",
-        title="y1: Solute Concentration", linewidth=2, color=:blue)
-    plot!(p1, t_plot, [sol(t, idxs=:Cs) for t in t_plot],
+    p1 = plot(t_minutes, [sol(t, idxs=:y1) for t in t_plot],
+        label="Concentration", xlabel="Time [min]", ylabel="Concentration [g/g solvent]",
+        title="Solute Concentration", linewidth=2, color=:blue)
+    plot!(p1, t_minutes, [sol(t, idxs=:Cs) for t in t_plot],
         label="Saturation Cs", linestyle=:dash, linewidth=2, color=:green)
-    plot!(p1, t_plot, [sol(t, idxs=:Cm) for t in t_plot],
+    plot!(p1, t_minutes, [sol(t, idxs=:Cm) for t in t_plot],
         label="Metastable Cm", linestyle=:dot, linewidth=2, color=:red)
-    plot!(p1, t_plot, [sol(t, idxs=:Cm) for t in t_plot] .- h_offset,
+    plot!(p1, t_minutes, [sol(t, idxs=:Cm) for t in t_plot] .- h_offset,
         label="Metastable Cm corrected", linestyle=:dot, linewidth=2, color=:cyan)
     push!(plots_array, p1)
 
     # Plot 2: y2 (Zeroth moment of seeded crystals)
-    p2 = plot(t_plot, [sol(t, idxs=:y2) for t in t_plot],
-        label="y2", xlabel="Time [s]", ylabel="Crystal Count [#/m³]",
-        title="y2: Seeded Crystal Count", linewidth=2, color=:purple)
+    p2 = plot(t_minutes, [sol(t, idxs=:y2) for t in t_plot],
+        label="Seeded crystals", xlabel="Time [min]", ylabel="Crystal Count [#/g solvent]",
+        title="Seeded Crystal Count", linewidth=2, color=:purple,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p2)
 
     # Plot 3: y3 (First moment of seeded crystals)
-    p3 = plot(t_plot, [sol(t, idxs=:y3) for t in t_plot],
-        label="y3", xlabel="Time [s]", ylabel="1st Moment [μm/m³]",
-        title="y3: Seeded 1st Moment", linewidth=2, color=:orange)
+    p3 = plot(t_minutes, [sol(t, idxs=:y3) for t in t_plot],
+        label="Seeded crystals", xlabel="Time [min]", ylabel="1st Moment [μm/g solvent]",
+        title="Seeded 1st Moment", linewidth=2, color=:orange,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p3)
 
     # Plot 4: y4 (Second moment of seeded crystals)
-    p4 = plot(t_plot, [sol(t, idxs=:y4) for t in t_plot],
-        label="y4", xlabel="Time [s]", ylabel="2nd Moment [μm²/m³]",
-        title="y4: Seeded 2nd Moment", linewidth=2, color=:cyan)
+    p4 = plot(t_minutes, [sol(t, idxs=:y4) for t in t_plot],
+        label="Seeded crystals", xlabel="Time [min]", ylabel="2nd Moment [μm²/g solvent]",
+        title="Seeded 2nd Moment", linewidth=2, color=:cyan,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p4)
 
     # Plot 5: y5 (Third moment of seeded crystals)
-    p5 = plot(t_plot, [sol(t, idxs=:y5) for t in t_plot],
-        label="y5", xlabel="Time [s]", ylabel="3rd Moment [μm³/m³]",
-        title="y5: Seeded 3rd Moment", linewidth=2, color=:darkgreen)
+    p5 = plot(t_minutes, [sol(t, idxs=:y5) for t in t_plot],
+        label="Seeded crystals", xlabel="Time [min]", ylabel="3rd Moment [μm³/g solvent]",
+        title="Seeded 3rd Moment", linewidth=2, color=:darkgreen,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p5)
 
     # Plot 6: y6 (Zeroth moment of nucleated crystals)
-    p6 = plot(t_plot, [sol(t, idxs=:y6) for t in t_plot],
-        label="y6", xlabel="Time [s]", ylabel="Crystal Count [#/m³]",
-        title="y6: Nucleated Crystal Count", linewidth=2, color=:navy)
+    p6 = plot(t_minutes, [sol(t, idxs=:y6) for t in t_plot],
+        label="Nucleated crystals", xlabel="Time [min]", ylabel="Crystal Count [#/g solvent]",
+        title="Nucleated Crystal Count", linewidth=2, color=:navy)
     push!(plots_array, p6)
 
     # Plot 7: y7 (First moment of nucleated crystals)
-    p7 = plot(t_plot, [sol(t, idxs=:y7) for t in t_plot],
-        label="y7", xlabel="Time [s]", ylabel="1st Moment [μm/m³]",
-        title="y7: Nucleated 1st Moment", linewidth=2, color=:brown)
+    p7 = plot(t_minutes, [sol(t, idxs=:y7) for t in t_plot],
+        label="Nucleated crystals", xlabel="Time [min]", ylabel="1st Moment [μm/g solvent]",
+        title="Nucleated 1st Moment", linewidth=2, color=:brown,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p7)
 
     # Plot 8: y8 (Second moment of nucleated crystals)
-    p8 = plot(t_plot, [sol(t, idxs=:y8) for t in t_plot],
-        label="y8", xlabel="Time [s]", ylabel="2nd Moment [μm²/m³]",
-        title="y8: Nucleated 2nd Moment", linewidth=2, color=:magenta)
+    p8 = plot(t_minutes, [sol(t, idxs=:y8) for t in t_plot],
+        label="Nucleated crystals", xlabel="Time [min]", ylabel="2nd Moment [μm²/g solvent]",
+        title="Nucleated 2nd Moment", linewidth=2, color=:magenta,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p8)
 
     # Plot 9: y9 (Third moment of nucleated crystals)
-    p9 = plot(t_plot, [sol(t, idxs=:y9) for t in t_plot],
-        label="y9", xlabel="Time [s]", ylabel="3rd Moment [μm³/m³]",
-        title="y9: Nucleated 3rd Moment", linewidth=2, color=:darkred)
+    p9 = plot(t_minutes, [sol(t, idxs=:y9) for t in t_plot],
+        label="Nucleated crystals", xlabel="Time [min]", ylabel="3rd Moment [μm³/g solvent]",
+        title="Nucleated 3rd Moment", linewidth=2, color=:darkred,
+        yformatter=:scientific, left_margin=15Plots.mm)
     push!(plots_array, p9)
 
     # Plot 10: Temperature profile
-    p10 = plot(t_plot, [sol(t, idxs=:T) for t in t_plot],
-        label="Temperature", xlabel="Time [s]", ylabel="Temperature [K]",
+    p10 = plot(t_minutes, [sol(t, idxs=:T) for t in t_plot],
+        label="Temperature", xlabel="Time [min]", ylabel="Temperature [K]",
         title="Temperature Profile", linewidth=2, color=:red)
     push!(plots_array, p10)
 
     # Plot 11: C_high (Over-concentration violation)
-    p11 = plot(t_plot, [sol(t, idxs=:C_high) for t in t_plot],
-        label="C_high", xlabel="Time [s]", ylabel="Over-concentration",
-        title="C_high: Over-concentration Violation", linewidth=2, color=:orange)
+    p11 = plot(t_minutes, [sol(t, idxs=:C_high) for t in t_plot],
+        label="Over-concentration", xlabel="Time [min]", ylabel="Over-concentration",
+        title="Over-concentration Violation", linewidth=2, color=:orange)
     push!(plots_array, p11)
 
     # Plot 12: C_low (Under-concentration violation)
-    p12 = plot(t_plot, [sol(t, idxs=:C_low) for t in t_plot],
-        label="C_low", xlabel="Time [s]", ylabel="Under-concentration",
-        title="C_low: Under-concentration Violation", linewidth=2, color=:lightblue)
+    p12 = plot(t_minutes, [sol(t, idxs=:C_low) for t in t_plot],
+        label="Under-concentration", xlabel="Time [min]", ylabel="Under-concentration",
+        title="Under-concentration Violation", linewidth=2, color=:lightblue)
     push!(plots_array, p12)
 
-    # Create combined plot layout (6x2 grid for 12 plots)
-    combined_plot = plot(plots_array..., layout=(6, 2), size=(1000, 1400))
+    # Create combined plot layout (6x2 grid for 12 plots) with main title
+    combined_plot = plot(plots_array..., layout=(6, 2), size=(1200, 1400), 
+                        plot_title=plot_title, titlefontsize=16,
+                        left_margin=5Plots.mm, right_margin=5Plots.mm)
 
     # Display combined plot
     display(combined_plot)

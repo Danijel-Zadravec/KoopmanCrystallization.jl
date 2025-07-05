@@ -2,9 +2,6 @@ using KoopmanCrystallization
 using SciMLExpectations
 using Statistics
 n_steps = 30
-model = ProcessModel(n_steps);
-
-controls = create_init_controls(n_steps, 323.14, 303.16)
 
 # Initial conditions
 initial_conditions = [
@@ -33,14 +30,16 @@ param_values = [
     :g => 1.5,           # Growth rate exponent
     :h_offset => 0.00,    # Offset for under-concentration variable
 ]
+model = ProcessModel(n_steps);
+controls = create_init_controls(n_steps, 323.149, 303.151)
 det_prob = DeterministicProblem(model, initial_conditions, param_values, controls);
 linear_results, det_ode_prob = solve_controls(det_prob, controls);
-plot_states(linear_results, det_prob);
+plot_states(linear_results, det_prob; plot_title="Linear Temperature Profile Results");
 optim_prob = DetermOptimization(det_prob; penalty=10000000.0);
 opt_sol_determ = OptimizationSolution(optim_prob; maxiters=30);
 opt_results = opt_sol_determ.optimal_solution;
 opt_controls = opt_sol_determ.optimal_controls
-plot_states(opt_results[1], det_prob);
+plot_states(opt_results[1], det_prob; plot_title="Deterministic Optimization Results");
 
 unc_params = [:kb, :kg, :Eg_R, :Eb_R, :b, :g]
 det_prob_unc = deepcopy(det_prob);
@@ -54,7 +53,7 @@ println("Objective: ", koop_sol.u[1])
 println("Cm violation frequency: ", koop_sol.u[2])
 println("Cs violation frequency: ", koop_sol.u[3])
 
-plot_states(bo_res.determ_opt_sol.optimal_solution[1], bo_res.determ_problem);
+plot_states(bo_res.determ_opt_sol.optimal_solution[1], bo_res.determ_problem; plot_title="Optimization with Uncertainty");
 objs_mc, l_dev_mc, u_dev_mc = solve_mc_results(koop_prob, 2000000);
 avg_objs_mc = mean(objs_mc)
 avg_l_dev_mc = mean(l_dev_mc)
