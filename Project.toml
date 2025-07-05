@@ -1,7 +1,7 @@
 name = "KoopmanCrystallization"
 uuid = "3e58aada-0803-44dd-9543-8a81e622128b"
 authors = ["Danijel Zadravec <danijel.zadravec@.fsb.unizg.hr>"]
-version = "0.1.0"
+version = "1.0.1"
 description = "Crystallization process optimization using Koopman expectation"
 
 [deps]
