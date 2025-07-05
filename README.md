@@ -35,8 +35,10 @@ using KoopmanCrystallization  # Load the package
    - Install the Julia extension if not already installed
 
 3. **Activate the environment:**
-   - Open the VS Code terminal (Terminal → New Terminal)
-   - In the terminal, run: `julia --project=.`
+   - Press Ctrl+Shift+P and type "Julia: Start REPL"
+   - This will open the Julia REPL in VS Code and should automatically activate the project environment
+   - **Verify the environment is active:** Look for `(KoopmanCrystallization) pkg>` in the REPL prompt when you press `]`
+   - If not automatically activated, type `] activate .` in the Julia REPL
    - In the Julia REPL, run:
      ```julia
      using Pkg
@@ -61,7 +63,7 @@ The main example is in `case_study_final_script.jl`. This script demonstrates th
 
 **In VS Code:**
 1. Open `case_study_final_script.jl`
-2. Make sure Julia environment is activated (see installation steps above)
+2. Make sure Julia REPL is started (Ctrl+Shift+P → "Julia: Start REPL")
 3. Run the entire script with Ctrl+Shift+P → "Julia: Execute File"
 4. Or execute sections line by line using Ctrl+Enter
 
