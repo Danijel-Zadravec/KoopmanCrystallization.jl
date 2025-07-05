@@ -1,8 +1,6 @@
-include("process_model.jl");
-include("deterministic_problem.jl");
-include("deterministic_optimization.jl");
-include("koopman.jl");
-include("backoff.jl");
+using KoopmanCrystallization
+using SciMLExpectations
+using Statistics
 n_steps = 30
 model = ProcessModel(n_steps);
 
@@ -49,8 +47,21 @@ det_prob_unc = deepcopy(det_prob);
 bo_res = BackoffOptimization(det_prob_unc, unc_params; max_iterations=8, tolerance=0.005);
 koop_prob = bo_res.koop_problem;
 koop_sol = solve_koop(koop_prob, ireltol=2e-6, quadalg=HCubatureJL(), maxiters=100000)
+
+# Print koop_sol results
+println("Koopman Solution Results:")
+println("Objective: ", koop_sol.u[1])
+println("Cm violation frequency: ", koop_sol.u[2])
+println("Cs violation frequency: ", koop_sol.u[3])
+
 plot_states(bo_res.determ_opt_sol.optimal_solution[1], bo_res.determ_problem);
-objs_mc, l_dev_mc, u_dev_mc = solve_mc_results(koop_prob_tst, 2000000);
+objs_mc, l_dev_mc, u_dev_mc = solve_mc_results(koop_prob, 2000000);
 avg_objs_mc = mean(objs_mc)
 avg_l_dev_mc = mean(l_dev_mc)
 avg_u_dev_mc = mean(u_dev_mc)
+
+# Print Monte Carlo average results
+println("\nMonte Carlo Results:")
+println("Average objective: ", avg_objs_mc)
+println("Average Cm violation frequency: ", avg_u_dev_mc)
+println("Average Cs violation frequency: ", avg_l_dev_mc)
